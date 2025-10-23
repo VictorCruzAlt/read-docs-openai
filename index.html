@@ -1,1 +1,39 @@
-hola
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Asistente Local</title>
+</head>
+<body>
+  <h1>Asistente de Archivos Locales</h1>
+
+  <h2>Subir archivo</h2>
+  <input type="file" id="archivo" />
+  <button onclick="subir()">Subir</button>
+
+  <h2>Hacer pregunta</h2>
+  <input type="text" id="pregunta" placeholder="Escribe tu pregunta..." />
+  <button onclick="preguntar()">Preguntar</button>
+
+  <pre id="respuesta"></pre>
+
+  <script>
+    async function subir() {
+      const file = document.getElementById('archivo').files[0];
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/subir', { method: 'POST', body: formData });
+      const data = await res.json();
+      alert(data.mensaje);
+    }
+
+    async function preguntar() {
+      const formData = new FormData();
+      formData.append('pregunta', document.getElementById('pregunta').value);
+      const res = await fetch('/preguntar', { method: 'POST', body: formData });
+      const data = await res.json();
+      document.getElementById('respuesta').textContent = data.respuesta;
+    }
+  </script>
+</body>
+</html>
